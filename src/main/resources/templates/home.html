@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<html>
+<!-- php  include_once "htmlheader.php" ? -->
+<head th:insert="htmlheader.html::header"></head>
+<body onresize="updateMenu()" >
+<div id="main">
+    <div id="main2">
+<!--         <?php if ( !($isMobile) ) { ?> -->
+<!--         <?php include "leftColumn.php"?> -->
+        <head th:insert="leftColumn.html::leftColumn"></head>
+<!--        <?php } ?> -->
+        <div id="rightColumn">
+            <table class="rcMain" cellpadding="0" border="0" cellspacing="0">
+                <tbody>
+                <!-- *****************  -->
+                <!-- BANDEAU SUPERIEUR  -->
+                <!-- *****************  -->
+
+                <tr>
+                    <!-- colonne de gauche -->
+
+                    <!-- ******* -->
+                    <!-- Header  -->
+                    <!-- *****  -->
+                    <td class="header">
+                        <div th:insert="top.html::top"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="menu"><div id="menuContainer"><div th:insert="menu.html::menu"></div>
+<!--                        <?php if (isset($_SESSION["user"])) {?>
+                        <h2> Bienvenue dans l'espace "Membres" </h2>
+                        <?php } ?>-->
+                    </div>
+                </tr>
+                <!-- *************  -->
+                <!-- LES DERNIERES  -->
+                <!-- *************  -->
+                <tr>
+                    <td class="title">
+                        <img src="./images/Signet_lesdernieres.jpg" alt="" style="width: 81px; height: 39px;">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td >
+                        <div  id="dernierescontainer" style="margin-left:10px"><!-- <?php include_once "news.php" ?> --></div>
+                    </td>
+                    <td><br>
+                    </td>
+                    <td><br>
+                    </td>
+                </tr>
+                <!-- ******************************************************************************  -->
+                <!-- EVENEMENTS                                                                      -->
+                <!-- ******************************************************************************  -->
+
+                <!-- *************  -->
+                <!--  Signet        -->
+                <!-- *************  -->
+
+                <tr>
+                    <td class="title">
+                        <img src="./images/Signet_evenement.jpg" alt="" style="width: 81px; height: 39px;">
+                        <?php //________________________________________________________________________________ ?>
+                    </td>
+                </tr>
+                <!-- *************  -->
+                <!--  Contenu        -->
+                <!-- *************  -->
+                <tr>
+                    <!-- contenu principal -->
+                    <td class="eventContent">
+                        <table style="width:100%">
+                            <tr>
+                                <td class="left" ><!-- <?php include_once "evenements.php" ?> --></td>
+                                <td class="right" ></td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
