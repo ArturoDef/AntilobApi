@@ -1,24 +1,45 @@
 package com.antilob.api.controller;
 
+import com.antilob.engine.database.IRace;
 import com.antilob.engine.database.entity.*;
+import com.antilob.engine.service.RaceService;
+import com.antilob.system.ApplicationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 import  com.antilob.engine.service.IDataService;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/api")
+//@CrossOrigin(origins = "http://localhost:9001")
 public class mainController {
-    private final IDataService dataService;
 
-    public mainController(IDataService dataService) {
+
+    @Autowired
+    ApplicationProperties applicationProperties;
+
+    @Autowired
+    private IDataService dataService;
+
+    @Autowired
+    private RaceService raceService;
+
+
+/*    public mainController(IDataService dataService) {
         this.dataService = dataService;
-    }
+    }*/
 
 
-    @RequestMapping("/memberList")
+    @GetMapping("/memberList")
     public List<Member> memberList() {
         List<Member> list = dataService.getMemberList();
         return list;
@@ -38,8 +59,28 @@ public class mainController {
     }
 
     @RequestMapping("/raceList")
-    public List<Race> raceList() {
-        List<Race> list = dataService.getRaceList();
+    public List<IRace> raceList() {
+        List<IRace> list = raceService.getRaceList();
+        return list;
+    }
+
+    @GetMapping("/raceListOfDate")
+    public List<IRace> raceListOfDate(@RequestParam("date") String dateString) {
+        Date date = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        try {
+            date = formatter.parse(dateString);
+        }
+        catch (ParseException e) {
+            System.out.println("Invalid date String building Id of Race");
+        }
+        List<IRace> list = raceService.listRaceOfWeek(date);
+        return list;
+    }
+
+    @GetMapping("/closedRaceList")
+    public List<Race> getResults() {
+        List<Race> list = raceService.getRaceFinished();
         return list;
     }
 
@@ -54,19 +95,20 @@ public class mainController {
         return list;
     }
 
+    @GetMapping("/race/{id}")
+    public Race getRace(@PathVariable("id") String number) {
+        Integer id = Integer.parseInt(number);
+        Race race = raceService.getRace(id.longValue());
+        return race;
+    }
+
     @RequestMapping("/raceResults/{id}")
-    public List<Result> ResultList(@PathVariable("id") String number) {
+    public List<Result> ResultListOfRace(@PathVariable("id") String number) {
         Integer id = Integer.parseInt(number);
         List<Result> list = dataService.getResultsOfRace(id);
         return list;
     }
 
-    @RequestMapping("/race/{id}")
-    public Race getRace(@PathVariable("id") String number) {
-        Integer id = Integer.parseInt(number);
-        Race race = dataService.getRace(id.longValue());
-        return race;
-    }
 
     @RequestMapping("/raceResultsAll/{id}")
     public List<Result> ResultListAll(@PathVariable("id") String number) {
@@ -102,6 +144,22 @@ public class mainController {
         return member;
     }
 
+    @PostMapping("/race")
+    public void AddRace(@RequestBody String jsonRace) {
+        try {
+            raceService.AddRace(jsonRace);
+        }
+        catch (Exception e) {
+            System.out.println("Error creating new Race");
+        }
+    }
+
+    @RequestMapping("system/ApplicationProperties")
+    @ResponseBody
+    public String memberResults() {
+        applicationProperties.logApplicationProperties();
+        return "Consult the log please";
+    }
 
 
 }
