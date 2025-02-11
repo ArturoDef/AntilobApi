@@ -54,6 +54,7 @@ public class mainController {
     }
     @RequestMapping("/lastResultList")
     public List<LastResult> lastResultList() {
+        System.out.println("get lastResultList");
         List<LastResult> list = dataService.getLastResultList();
         return list;
     }
